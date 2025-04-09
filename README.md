@@ -79,6 +79,14 @@ This section details the setup of a basic developmentment environment.
 
 ---
 
+**Create a .env file and fill in the values**
+
+```console
+> copy .env.example .env
+```
+
+---
+
 **Launch Application**
 
 ```console
