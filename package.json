@@ -1,14 +1,10 @@
 {
-  "name": "helioslauncher",
-  "version": "2.2.1",
-  "productName": "Helios Launcher",
-  "description": "Modded Minecraft Launcher",
-  "author": "Daniel Scalzi (https://github.com/dscalzi/)",
+  "name": "blockwarslauncher",
+  "version": "1.0.0",
+  "productName": "Block Wars Launcher",
+  "description": "Launcher for Block Wars",
+  "author": "Capollo Media LLC, GerwinT",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/dscalzi/HeliosLauncher",
-  "bugs": {
-    "url": "https://github.com/dscalzi/HeliosLauncher/issues"
-  },
   "private": true,
   "main": "index.js",
   "scripts": {
@@ -46,6 +42,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dscalzi/HeliosLauncher.git"
+    "url": "git+https://github.com/BlockWarsMC/BlockWarsLauncher.git"
   }
 }

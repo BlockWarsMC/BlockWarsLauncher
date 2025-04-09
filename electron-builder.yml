@@ -1,8 +1,8 @@
-appId: 'helioslauncher'
-productName: 'Helios Launcher'
-artifactName: '${productName}-setup-${version}.${ext}'
+appId: 'blockwarslauncher'
+productName: 'Block Wars Launcher'
+artifactName: '${productName}-${version}.${ext}'
 
-copyright: 'Copyright © 2018-2024 Daniel Scalzi'
+copyright: 'Copyright © 2025 Capollo Media LLC, GerwinT'
 
 asar: true
 compression: 'maximum'
@@ -16,15 +16,8 @@ extraResources:
 # Windows Configuration
 win: 
   target: 
-    - target: 'nsis'
+    - target: 'portable'
       arch: 'x64'
-
-# Windows Installer Configuration
-nsis:
-  oneClick: false
-  perMachine: false
-  allowElevation: true
-  allowToChangeInstallationDirectory: true
 
 # macOS Configuration
 mac:
@@ -39,10 +32,10 @@ mac:
 # Linux Configuration
 linux: 
   target: 'AppImage'
-  maintainer: 'Daniel Scalzi'
-  vendor: 'Daniel Scalzi'
-  synopsis: 'Modded Minecraft Launcher'
-  description: 'Custom launcher which allows users to join modded servers. All mods, configurations, and updates are handled automatically.'
+  maintainer: 'Capollo Media LLC, GerwinT'
+  vendor: 'Capollo Media LLC, GerwinT'
+  synopsis: 'Block Wars Launcher'
+  description: 'Custom launcher which allows users to join Block Wars servers. All mods, configurations, and updates are handled automatically.'
   category: 'Game'
 
 
