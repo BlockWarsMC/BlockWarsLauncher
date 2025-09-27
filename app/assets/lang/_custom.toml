@@ -7,7 +7,6 @@ title = "Block Wars Launcher"
 mediaWebsiteURL = "https://blockwars.games"
 mediaXURL = "https://x.com/BlockWarsEvent"
 mediaYouTubeURL = "https://www.youtube.com/@BlockWarsEvent"
-mediaDiscordURL = "https://discord.gg/3gDTqyjVze"
 
 [ejs.settings]
 sourceGithubLink = "https://github.com/BlockWarsMC/BlockWarsLauncher"
