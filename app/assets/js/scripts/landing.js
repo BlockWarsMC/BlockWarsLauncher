@@ -939,13 +939,24 @@ function displayArticle(articleObject, index){
     newsArticleTitle.href = articleObject.link
     newsArticleAuthor.innerHTML = 'by ' + articleObject.author
     newsArticleDate.innerHTML = articleObject.date
-    newsArticleComments.innerHTML = articleObject.comments
-    newsArticleComments.href = articleObject.commentsLink
     newsArticleContentScrollable.innerHTML = '<div id="newsArticleContentWrapper"><div class="newsArticleSpacerTop"></div>' + articleObject.content + '<div class="newsArticleSpacerBot"></div></div>'
+    
+    // Handle bbCode spoiler buttons
     Array.from(newsArticleContentScrollable.getElementsByClassName('bbCodeSpoilerButton')).forEach(v => {
         v.onclick = () => {
             const text = v.parentElement.getElementsByClassName('bbCodeSpoilerText')[0]
             text.style.display = text.style.display === 'block' ? 'none' : 'block'
+        }
+    })
+    
+    // Handle YouTube thumbnail clicks
+    Array.from(newsArticleContentScrollable.getElementsByClassName('youtube-thumbnail')).forEach(thumbnail => {
+        thumbnail.onclick = () => {
+            const videoId = thumbnail.getAttribute('data-video-id')
+            if (videoId) {
+                const videoUrl = `https://www.youtube.com/watch?v=${videoId}`
+                remote.shell.openExternal(videoUrl)
+            }
         }
     })
     newsNavigationStatus.innerHTML = Lang.query('ejs.landing.newsNavigationStatus', {currentPage: index, totalPages: newsArr.length})
@@ -981,12 +992,35 @@ async function loadNews(){
                     // Resolve date.
                     const date = new Date(el.find('pubDate').text()).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric'})
 
-                    // Resolve comments.
-                    let comments = el.find('slash\\:comments').text() || '0'
-                    comments = comments + ' Comment' + (comments === '1' ? '' : 's')
-
+                    // Get content from either content:encoded or description field
+                    let content = el.find('content\\:encoded').text() || el.find('description').text() || ''
+                    
+                    // Extract YouTube video thumbnail if available
+                    let thumbnail = el.find('media\\:content').attr('url') || ''
+                    
+                    // If we have a thumbnail, create enhanced content with video link
+                    if (thumbnail) {
+                        // Extract video ID from the link element instead of content
+                        const videoLink = el.find('link').text();
+                        const videoIdMatch = videoLink.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/);
+                        if (videoIdMatch) {
+                            const videoId = videoIdMatch[1];
+                            // Create enhanced content with thumbnail and video link
+                            content = `
+                                <div class="youtube-video-container" style="margin-bottom: 15px;">
+                                    <div class="youtube-thumbnail" data-video-id="${videoId}" style="position: relative; display: inline-block; cursor: pointer;">
+                                        <img src="${thumbnail}" alt="Video Thumbnail" style="max-width: 100%; height: auto; border-radius: 8px;">
+                                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); border-radius: 50%; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+                                            <div style="width: 0; height: 0; border-left: 20px solid white; border-top: 12px solid transparent; border-bottom: 12px solid transparent; margin-left: 4px;"></div>
+                                        </div>
+                                    </div>
+                                    <p style="margin-top: 10px; font-size: 14px; color: #666;">Click to watch on YouTube</p>
+                                </div>
+                            `;
+                        }
+                    }
+                    
                     // Fix relative links in content.
-                    let content = el.find('content\\:encoded').text()
                     let regex = /src="(?!http:\/\/|https:\/\/)(.+?)"/g
                     let matches
                     while((matches = regex.exec(content))){
@@ -995,7 +1029,7 @@ async function loadNews(){
 
                     let link   = el.find('link').text()
                     let title  = el.find('title').text()
-                    let author = el.find('dc\\:creator').text()
+                    let author = el.find('dc\\:creator').text() || 'Unknown Author'
 
                     // Generate article.
                     articles.push(
@@ -1004,9 +1038,7 @@ async function loadNews(){
                             title,
                             date,
                             author,
-                            content,
-                            comments,
-                            commentsLink: link + '#comments'
+                            content
                         }
                     )
                 }
