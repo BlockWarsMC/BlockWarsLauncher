@@ -8,8 +8,6 @@ const { DistroAPI }  = require('./distromanager')
 const LangLoader     = require('./langloader')
 const { LoggerUtil } = require('helios-core')
 // eslint-disable-next-line no-unused-vars
-const { HeliosDistribution } = require('helios-core/common')
-
 const logger = LoggerUtil.getLogger('Preloader')
 
 logger.info('Loading..')
@@ -22,11 +20,14 @@ ConfigManager.load()
 DistroAPI['commonDir'] = ConfigManager.getCommonDirectory()
 DistroAPI['instanceDir'] = ConfigManager.getInstanceDirectory()
 
+// Refresh the DistroAPI now that ConfigManager is loaded with the correct branch setting
+const { refreshDistributionAPI } = require('./distromanager')
+refreshDistributionAPI()
+
 // Load Strings
 LangLoader.setupLanguage()
 
 /**
- * 
  * @param {HeliosDistribution} data 
  */
 function onDistroLoad(data){

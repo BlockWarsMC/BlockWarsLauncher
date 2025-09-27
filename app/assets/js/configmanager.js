@@ -27,6 +27,10 @@ exports.getLauncherDirectory = function(){
  * @returns {string} The absolute path of the launcher's data directory.
  */
 exports.getDataDirectory = function(def = false){
+    // If config is not loaded yet, return the default value
+    if (config == null || !config.settings || !config.settings.launcher) {
+        return DEFAULT_CONFIG.settings.launcher.dataDirectory
+    }
     return !def ? config.settings.launcher.dataDirectory : DEFAULT_CONFIG.settings.launcher.dataDirectory
 }
 
@@ -86,7 +90,8 @@ const DEFAULT_CONFIG = {
         },
         launcher: {
             allowPrerelease: false,
-            dataDirectory: dataPath
+            dataDirectory: dataPath,
+            distributionBranch: 'main'
         }
     },
     newsCache: {
@@ -397,12 +402,14 @@ exports.removeAuthAccount = function(uuid){
  * @returns {Object} The selected authenticated account.
  */
 exports.getSelectedAccount = function(){
+    // If config is not loaded yet, return null
+    if (config == null || !config.authenticationDatabase || !config.selectedAccount) {
+        return null
+    }
     return config.authenticationDatabase[config.selectedAccount]
 }
 
 /**
- * Set the selected authenticated account.
- * 
  * @param {string} uuid The UUID of the account which is to be set
  * as the selected account.
  * 
@@ -750,8 +757,37 @@ exports.getAllowPrerelease = function(def = false){
 /**
  * Change the status of Whether or not the launcher should download prerelease versions.
  * 
- * @param {boolean} launchDetached Whether or not the launcher should download prerelease versions.
+ * @param {boolean} allowPrerelease Whether or not the launcher should download prerelease versions.
  */
 exports.setAllowPrerelease = function(allowPrerelease){
     config.settings.launcher.allowPrerelease = allowPrerelease
+}
+
+/**
+ * Get the distribution branch name.
+ * 
+ * @param {boolean} def Optional. If true, the default value will be returned.
+ * @returns {string} The distribution branch name.
+ */
+exports.getDistributionBranch = function(def = false){
+    // If config is not loaded yet, return the default value
+    if (config == null || !config.settings || !config.settings.launcher) {
+        return DEFAULT_CONFIG.settings.launcher.distributionBranch
+    }
+    
+    // If the distributionBranch property doesn't exist yet (for existing configs), return default
+    if (typeof config.settings.launcher.distributionBranch === 'undefined') {
+        return DEFAULT_CONFIG.settings.launcher.distributionBranch
+    }
+    
+    return !def ? config.settings.launcher.distributionBranch : DEFAULT_CONFIG.settings.launcher.distributionBranch
+}
+
+/**
+ * Set the distribution branch name.
+ * 
+ * @param {string} distributionBranch The distribution branch name.
+ */
+exports.setDistributionBranch = function(distributionBranch){
+    config.settings.launcher.distributionBranch = distributionBranch
 }

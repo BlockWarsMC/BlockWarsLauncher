@@ -4,6 +4,7 @@ const semver = require('semver')
 
 const DropinModUtil  = require('./assets/js/dropinmodutil')
 const { MSFT_OPCODE, MSFT_REPLY_TYPE, MSFT_ERROR } = require('./assets/js/ipcconstants')
+const { refreshDistributionAPI } = require('./assets/js/distromanager')
 
 const settingsState = {
     invalid: new Set()
@@ -327,6 +328,7 @@ function fullSettingsSave() {
     ConfigManager.save()
     saveDropinModConfiguration()
     saveShaderpackSettings()
+    refreshDistributionAPI()
 }
 
 /* Closes the settings view and saves all data. */
