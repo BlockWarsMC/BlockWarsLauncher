@@ -98,6 +98,39 @@ function setLaunchEnabled(val){
     document.getElementById('launch_button').disabled = !val
 }
 
+/**
+ * Toggle between launch and kill button based on game state.
+ * 
+ * @param {boolean} isGameRunning True if game is running, false otherwise.
+ */
+function toggleLaunchKillButton(isGameRunning){
+    const launchButton = document.getElementById('launch_button')
+    const killButton = document.getElementById('kill_button')
+    const serverSelectionButton = document.getElementById('server_selection_button')
+    
+    if(isGameRunning){
+        launchButton.style.display = 'none'
+        killButton.style.display = 'inline'
+        serverSelectionButton.innerHTML = Lang.query('ejs.landing.gameRunning')
+        serverSelectionButton.style.color = '#00ff00'
+        serverSelectionButton.classList.add('game-running')
+        serverSelectionButton.disabled = true
+        serverSelectionButton.style.pointerEvents = 'none'
+    } else {
+        launchButton.style.display = 'inline'
+        killButton.style.display = 'none'
+        serverSelectionButton.style.color = ''
+        serverSelectionButton.classList.remove('game-running')
+        serverSelectionButton.disabled = false
+        serverSelectionButton.style.pointerEvents = ''
+        // Restore original server name
+        DistroAPI.getDistribution().then(distro => {
+            const serv = distro.getServerById(ConfigManager.getSelectedServer())
+            serverSelectionButton.innerHTML = '&#8226; ' + (serv != null ? serv.rawServer.name : Lang.queryJS('landing.noSelection'))
+        })
+    }
+}
+
 // Bind launch button
 document.getElementById('launch_button').addEventListener('click', async e => {
     loggerLanding.info('Launching game..')
@@ -124,6 +157,15 @@ document.getElementById('launch_button').addEventListener('click', async e => {
     } catch(err) {
         loggerLanding.error('Unhandled error in during launch process.', err)
         showLaunchFailure(Lang.queryJS('landing.launch.failureTitle'), Lang.queryJS('landing.launch.failureText'))
+    }
+})
+
+// Bind kill button
+document.getElementById('kill_button').addEventListener('click', e => {
+    loggerLanding.info('Killing game process..')
+    if(proc != null){
+        proc.kill()
+        loggerLanding.info('Game process killed by user.')
     }
 })
 
@@ -614,6 +656,9 @@ async function dlAsync(login = true) {
 
             setLaunchDetails(Lang.queryJS('landing.dlAsync.doneEnjoyServer'))
 
+            // Show kill button when process starts
+            toggleLaunchKillButton(true)
+
             // Init Discord Hook
             if(distro.rawDistribution.discord != null && serv.rawServer.discord != null){
                 DiscordWrapper.initRPC(distro.rawDistribution.discord, serv.rawServer.discord)
@@ -623,6 +668,14 @@ async function dlAsync(login = true) {
                     DiscordWrapper.shutdownRPC()
                     hasRPC = false
                     proc = null
+                    toggleLaunchKillButton(false)
+                })
+            } else {
+                // If no Discord RPC, still handle process close
+                proc.on('close', (code, signal) => {
+                    loggerLaunchSuite.info('Game process closed.')
+                    proc = null
+                    toggleLaunchKillButton(false)
                 })
             }
 
