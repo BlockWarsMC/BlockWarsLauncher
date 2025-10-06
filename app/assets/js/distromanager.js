@@ -1,6 +1,15 @@
 const { DistributionAPI } = require('helios-core/common')
 const ConfigManager = require('./configmanager')
+const path = require('path')
+
+// Try loading environment variables for both dev and packaged builds
 require('dotenv').config()
+try {
+  const resourcesEnv = path.join(process.resourcesPath || '', '.env')
+  require('dotenv').config({ path: resourcesEnv })
+} catch (e) {
+  // Ignore if not in an Electron packaged context
+}
 
 /**
  * Construct the distribution URL based on the branch setting
@@ -37,7 +46,7 @@ function getFallbackDistributionURL() {
     return baseURL
 }
 
-// Use environment variable for the distribution URL
+// Use environment variable for the distribution URL (exposed for debugging/telemetry)
 exports.REMOTE_DISTRO_URL = process.env.REMOTE_DISTRO_URL
 
 let api = null

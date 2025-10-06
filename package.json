@@ -43,5 +43,21 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BlockWarsMC/BlockWarsLauncher.git"
+  },
+  "build": {
+    "extraResources": [
+      ".env"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}.${ext}"
+    }
   }
 }
