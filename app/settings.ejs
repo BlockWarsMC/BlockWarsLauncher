@@ -281,6 +281,15 @@
                     <input type="text" cValue="DistributionBranch" placeholder="main">
                 </div>
             </div>
+            <div class="settingsFieldContainer">
+                <div class="settingsFieldLeft">
+                    <span class="settingsFieldTitle"><%- lang('settings.ignoredValidationFilesTitle') %></span>
+                    <span class="settingsFieldDesc"><%- lang('settings.ignoredValidationFilesDesc') %></span>
+                </div>
+                <div class="settingsFieldRight">
+                    <textarea id="settingsIgnoredValidationFiles" rows="4" placeholder="options.txt&#10;*.txt&#10;config/custom.cfg"></textarea>
+                </div>
+            </div>
         </div>
         <div id="settingsTabAbout" class="settingsTab" style="display: none;">
             <div class="settingsTabHeader">

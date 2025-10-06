@@ -1288,7 +1288,8 @@ body, button {
 
 /* Default styles for text/number inputs. */
 #settingsContainer input[type=number],
-#settingsContainer input[type=text] {
+#settingsContainer input[type=text],
+#settingsContainer textarea {
     color: white;
     background: rgba(0, 0, 0, 0.25);
     border-radius: 3px;
@@ -1297,7 +1298,8 @@ body, button {
     transition: 0.25s ease;
 }
 #settingsContainer input[type=number]:focus,
-#settingsContainer input[type=text]:focus {
+#settingsContainer input[type=text]:focus,
+#settingsContainer textarea:focus {
     outline: none;
     border-color: rgba(126, 126, 126, 0.87);
 }
@@ -1305,6 +1307,13 @@ body, button {
     border-color: rgb(255, 27, 12);
     background: rgba(236, 0, 0, 0.25);
     color: rgb(255, 27, 12);
+}
+#settingsContainer textarea {
+    resize: vertical;
+    padding: 5px 8px;
+    min-height: 80px;
+    font-size: 12px;
+    line-height: 1.4;
 }
 
 /* Styles for a generic settings entry. */

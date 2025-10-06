@@ -91,7 +91,8 @@ const DEFAULT_CONFIG = {
         launcher: {
             allowPrerelease: false,
             dataDirectory: dataPath,
-            distributionBranch: 'main'
+            distributionBranch: 'main',
+            ignoredValidationFiles: ["options.txt"]
         }
     },
     newsCache: {
@@ -790,4 +791,58 @@ exports.getDistributionBranch = function(def = false){
  */
 exports.setDistributionBranch = function(distributionBranch){
     config.settings.launcher.distributionBranch = distributionBranch
+}
+
+/**
+ * Get the list of files to ignore during validation.
+ * Files are matched using glob patterns (e.g., "*.txt", "mods/optifine*.jar").
+ * 
+ * @param {boolean} def Optional. If true, the default value will be returned.
+ * @returns {Array<string>} Array of file patterns to ignore during validation.
+ */
+exports.getIgnoredValidationFiles = function(def = false){
+    // If config is not loaded yet, return the default value
+    if (config == null || !config.settings || !config.settings.launcher) {
+        return DEFAULT_CONFIG.settings.launcher.ignoredValidationFiles
+    }
+    
+    // If the ignoredValidationFiles property doesn't exist yet (for existing configs), return default
+    if (typeof config.settings.launcher.ignoredValidationFiles === 'undefined') {
+        return DEFAULT_CONFIG.settings.launcher.ignoredValidationFiles
+    }
+    
+    return !def ? config.settings.launcher.ignoredValidationFiles : DEFAULT_CONFIG.settings.launcher.ignoredValidationFiles
+}
+
+/**
+ * Set the list of files to ignore during validation.
+ * Files are matched using glob patterns (e.g., "*.txt", "mods/optifine*.jar").
+ * 
+ * @param {Array<string>} ignoredFiles Array of file patterns to ignore during validation.
+ */
+exports.setIgnoredValidationFiles = function(ignoredFiles){
+    config.settings.launcher.ignoredValidationFiles = ignoredFiles
+}
+
+/**
+ * Add a file pattern to the ignored validation files list.
+ * 
+ * @param {string} pattern The file pattern to add (glob format).
+ */
+exports.addIgnoredValidationFile = function(pattern){
+    if (!config.settings.launcher.ignoredValidationFiles.includes(pattern)) {
+        config.settings.launcher.ignoredValidationFiles.push(pattern)
+    }
+}
+
+/**
+ * Remove a file pattern from the ignored validation files list.
+ * 
+ * @param {string} pattern The file pattern to remove.
+ */
+exports.removeIgnoredValidationFile = function(pattern){
+    const index = config.settings.launcher.ignoredValidationFiles.indexOf(pattern)
+    if (index > -1) {
+        config.settings.launcher.ignoredValidationFiles.splice(index, 1)
+    }
 }

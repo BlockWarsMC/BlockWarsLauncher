@@ -161,7 +161,6 @@ async function initSettingsValues(){
                         } else {
                             val = Number.parseFloat(val)
                         }
-
                         v.setAttribute('value', val)
                     } else {
                         v.setAttribute('value', Number.parseFloat(gFn.apply(null, gFnOpts)))
@@ -171,11 +170,14 @@ async function initSettingsValues(){
         }
     }
 
+    // Populate Ignored Validation Files textarea (manual binding)
+    const ignoredEl = document.getElementById('settingsIgnoredValidationFiles')
+    if(ignoredEl){
+        const patterns = ConfigManager.getIgnoredValidationFiles() || []
+        ignoredEl.value = patterns.join('\n')
+    }
 }
 
-/**
- * Save the settings values.
- */
 function saveSettingsValues(){
     const sEls = document.getElementById('settingsContainer').querySelectorAll('[cValue]')
     Array.from(sEls).map((v, index, arr) => {
@@ -228,6 +230,15 @@ function saveSettingsValues(){
             }
         }
     })
+
+    // Save Ignored Validation Files textarea (manual binding)
+    const ignoredEl = document.getElementById('settingsIgnoredValidationFiles')
+    if(ignoredEl){
+        const lines = ignoredEl.value.split(/\r?\n/)
+            .map(l => l.trim())
+            .filter(l => l.length > 0)
+        ConfigManager.setIgnoredValidationFiles(lines)
+    }
 }
 
 let selectedSettingsTab = 'settingsTabAccount'
