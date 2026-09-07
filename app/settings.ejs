@@ -299,15 +299,25 @@
                             <span id="settingsAboutCurrentVersionTitle"><%- lang('settings.stableRelease') %></span>
                             <div id="settingsAboutCurrentVersionLine">
                                 <span id="settingsAboutCurrentVersionText"><%- lang('settings.versionText') %></span>
-                                <span id="settingsAboutCurrentVersionValue">0.0.1-alpha.18</span>
+                                <span id="settingsAboutCurrentVersionValue"></span>
                             </div>
                         </div>
                     </div>
                 </div>
+                <section id="settingsAboutRelease" aria-labelledby="settingsAboutReleaseHeading">
+                    <h3 id="settingsAboutReleaseHeading"><%- lang('settings.launcherUpdatesHeaderText') %></h3>
+                    <p id="settingsAboutReleaseStatus" role="status" aria-live="polite"></p>
+                    <dl id="settingsAboutReleaseDetails" hidden>
+                        <div><dt><%- lang('settings.latestLauncherVersion') %></dt><dd id="settingsAboutLatestVersion"></dd></div>
+                        <div><dt><%- lang('settings.minimumLauncherVersion') %></dt><dd id="settingsAboutMinimumVersion"></dd></div>
+                    </dl>
+                    <p id="settingsAboutReleaseMessage" hidden></p>
+                    <button id="settingsAboutCheckUpdates" type="button"><%- lang('settings.checkForUpdates') %></button>
+                </section>
                 <div id="settingsAboutButtons">
                     <a href="<%- lang('settings.sourceGithubLink') %>" id="settingsAboutSourceButton" class="settingsAboutButton"><%- lang('settings.sourceGithub') %></a>
                     <!-- The following must be included in third-party usage. -->
-                    <a href="https://github.com/dscalzi/HeliosLauncher" id="settingsAboutSourceButton" class="settingsAboutButton">Original Source</a>
+                    <a href="https://github.com/dscalzi/HeliosLauncher" id="settingsAboutOriginalSourceButton" class="settingsAboutButton"><%- lang('settings.originalSource') %></a>
                     <a href="<%- lang('settings.supportLink') %>" id="settingsAboutSupportButton" class="settingsAboutButton"><%- lang('settings.support') %></a>
                     <a href="#" id="settingsAboutDevToolsButton" class="settingsAboutButton"><%- lang('settings.devToolsConsole') %></a>
                 </div>

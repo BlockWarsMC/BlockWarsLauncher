@@ -10,8 +10,12 @@ const AuthManager   = require('./assets/js/authmanager')
 const ConfigManager = require('./assets/js/configmanager')
 const { DistroAPI } = require('./assets/js/distromanager')
 
-let rscShouldLoad = false
-let fatalStartupError = false
+const { waitForRelease, showReleaseNotice } = require('./assets/js/releaseui')
+const releaseQuery = (key, values) => Lang.queryJS(`release.${key}`, values)
+let launcherRelease
+let startupStarted = false
+let distributionReady
+const distributionLoaded = new Promise(resolve => { distributionReady = resolve })
 
 // Mapping of each view to their container IDs.
 const VIEWS = {
@@ -59,11 +63,6 @@ function getCurrentView(){
 
 async function showMainUI(data){
 
-    if(!isDev){
-        loggerAutoUpdater.info('Initializing..')
-        ipcRenderer.send('autoUpdateAction', 'initAutoUpdater', ConfigManager.getAllowPrerelease())
-    }
-
     await prepareSettings(true)
     updateSelectedServer(data.getServerById(ConfigManager.getSelectedServer()))
     refreshServerStatus()
@@ -99,6 +98,7 @@ async function showMainUI(data){
         setTimeout(() => {
             $('#loadingContainer').fadeOut(500, () => {
                 $('#loadSpinnerImage').removeClass('rotating')
+                showReleaseNotice(document, launcherRelease, releaseQuery)
             })
         }, 250)
         
@@ -407,43 +407,27 @@ function setSelectedAccount(uuid){
     validateSelectedAccount()
 }
 
-// Synchronous Listener
-document.addEventListener('readystatechange', async () => {
-
-    if (document.readyState === 'interactive' || document.readyState === 'complete'){
-        if(rscShouldLoad){
-            rscShouldLoad = false
-            if(!fatalStartupError){
-                const data = await DistroAPI.getDistribution()
-                await showMainUI(data)
-            } else {
-                showFatalStartupError()
-            }
-        } 
+async function startLauncher() {
+    if (startupStarted || document.readyState === 'loading') return
+    startupStarted = true
+    launcherRelease = await waitForRelease(document, remote.app.getVersion(), () => remote.app.quit(), releaseQuery)
+    if (!await distributionLoaded) {
+        showFatalStartupError()
+        return
     }
-
-}, false)
-
-// Actions that must be performed after the distribution index is downloaded.
-ipcRenderer.on('distributionIndexDone', async (event, res) => {
-    if(res) {
+    try {
         const data = await DistroAPI.getDistribution()
         syncModConfigurations(data)
         ensureJavaSettings(data)
-        if(document.readyState === 'interactive' || document.readyState === 'complete'){
-            await showMainUI(data)
-        } else {
-            rscShouldLoad = true
-        }
-    } else {
-        fatalStartupError = true
-        if(document.readyState === 'interactive' || document.readyState === 'complete'){
-            showFatalStartupError()
-        } else {
-            rscShouldLoad = true
-        }
+        await showMainUI(data)
+    } catch (error) {
+        loggerUICore.error('Launcher startup failed.', error)
+        showFatalStartupError()
     }
-})
+}
+
+document.addEventListener('readystatechange', startLauncher)
+ipcRenderer.on('distributionIndexDone', (_event, result) => distributionReady(result))
 
 // Util for development
 async function devModeToggle() {

@@ -133,6 +133,7 @@ function toggleLaunchKillButton(isGameRunning){
 
 // Bind launch button
 document.getElementById('launch_button').addEventListener('click', async e => {
+    if (!launcherRelease || launcherRelease.status === 'required') return
     loggerLanding.info('Launching game..')
     try {
         const server = (await DistroAPI.getDistribution()).getServerById(ConfigManager.getSelectedServer())

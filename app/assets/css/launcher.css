@@ -2207,6 +2207,63 @@ input:checked + .toggleSwitchSlider:before {
     font-weight: bold;
 }
 
+#settingsAboutRelease {
+    margin: 0 15px 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(126, 126, 126, 0.57);
+    font-size: 12px;
+}
+#settingsAboutReleaseHeading {
+    margin: 0 0 10px;
+    font-size: 14px;
+    font-family: 'Avenir Medium';
+}
+#settingsAboutReleaseStatus {
+    margin: 0 0 12px;
+}
+#settingsAboutReleaseDetails {
+    margin: 0 0 12px;
+}
+#settingsAboutReleaseDetails > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 6px 0;
+}
+#settingsAboutReleaseDetails dt {
+    color: #bfbfbf;
+}
+#settingsAboutReleaseDetails dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+#settingsAboutReleaseMessage {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+    margin: 0 0 12px;
+}
+#settingsAboutCheckUpdates {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(126, 126, 126, 0.57);
+    border-radius: 3px;
+    padding: 8px 12px;
+    color: white;
+    font: inherit;
+    cursor: pointer;
+}
+#settingsAboutCheckUpdates:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+}
+#settingsAboutCheckUpdates:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+}
+#settingsAboutCheckUpdates:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
 /* About information links. */
 #settingsAboutButtons {
     display: flex;
@@ -3891,4 +3948,95 @@ input:checked + .toggleSwitchSlider:before {
 /* Class which is applied when the spinner image is spinning. */
 .rotating {
     animation: rotating 10s linear infinite;
+}
+#releaseDialog {
+    width: min(420px, calc(100vw - 64px));
+    max-height: calc(100vh - 80px);
+    box-sizing: border-box;
+    padding: 28px;
+    border: 1px solid #777;
+    border-radius: 2px;
+    background: #171614;
+    color: #fff;
+    text-align: center;
+    overflow: auto;
+}
+
+#releaseDialog::backdrop {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+#releaseTitle, #releaseNoticeTitle {
+    margin: 0 0 16px;
+    font-family: 'Avenir Medium';
+    font-size: 20px;
+}
+
+#releaseDialog p + p {
+    margin-top: 12px;
+}
+
+#releaseDialog p, #releaseNotice p {
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    -webkit-user-select: text;
+}
+
+.releaseActions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+#releaseDialog button, #releaseNotice button {
+    padding: 8px 12px;
+    border: 1px solid #fff;
+    border-radius: 2px;
+    background: transparent;
+    color: #fff;
+    font-family: 'Avenir Medium';
+    cursor: pointer;
+}
+
+#releaseDialog button:hover, #releaseNotice button:hover {
+    background: #393734;
+}
+
+#releaseDialog button:focus-visible, #releaseNotice button:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+
+#releaseNotice {
+    position: absolute;
+    top: 38px;
+    right: 16px;
+    z-index: 400;
+    width: min(320px, calc(100vw - 64px));
+    max-height: calc(100vh - 100px);
+    overflow: auto;
+    box-sizing: border-box;
+    padding: 18px;
+    background: #242220;
+    color: #fff;
+    border: 1px solid #777;
+    border-radius: 2px;
+}
+
+#releaseNoticeTitle {
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+#releaseNotice p {
+    margin: 8px 0;
+}
+
+#releaseNotice button {
+    margin-top: 8px;
+    font-size: 12px;
 }
