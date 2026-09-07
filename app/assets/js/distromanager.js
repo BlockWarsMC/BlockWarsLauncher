@@ -1,4 +1,4 @@
-const { DistributionAPI } = require('helios-core/common')
+const { DistributionAPI } = require('@blockwarsmc/helios-core/common')
 const ConfigManager = require('./configmanager')
 const path = require('path')
 

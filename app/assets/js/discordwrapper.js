@@ -1,5 +1,5 @@
 // Work in progress
-const { LoggerUtil } = require('helios-core')
+const { LoggerUtil } = require('@blockwarsmc/helios-core')
 
 const logger = LoggerUtil.getLogger('DiscordWrapper')
 

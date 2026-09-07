@@ -6,7 +6,7 @@ const path           = require('path')
 const ConfigManager  = require('./configmanager')
 const { DistroAPI }  = require('./distromanager')
 const LangLoader     = require('./langloader')
-const { LoggerUtil } = require('helios-core')
+const { LoggerUtil } = require('@blockwarsmc/helios-core')
 // eslint-disable-next-line no-unused-vars
 const logger = LoggerUtil.getLogger('Preloader')
 
