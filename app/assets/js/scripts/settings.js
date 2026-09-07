@@ -170,12 +170,6 @@ async function initSettingsValues(){
         }
     }
 
-    // Populate Ignored Validation Files textarea (manual binding)
-    const ignoredEl = document.getElementById('settingsIgnoredValidationFiles')
-    if(ignoredEl){
-        const patterns = ConfigManager.getIgnoredValidationFiles() || []
-        ignoredEl.value = patterns.join('\n')
-    }
 }
 
 function saveSettingsValues(){
@@ -231,14 +225,6 @@ function saveSettingsValues(){
         }
     })
 
-    // Save Ignored Validation Files textarea (manual binding)
-    const ignoredEl = document.getElementById('settingsIgnoredValidationFiles')
-    if(ignoredEl){
-        const lines = ignoredEl.value.split(/\r?\n/)
-            .map(l => l.trim())
-            .filter(l => l.length > 0)
-        ConfigManager.setIgnoredValidationFiles(lines)
-    }
 }
 
 let selectedSettingsTab = 'settingsTabAccount'

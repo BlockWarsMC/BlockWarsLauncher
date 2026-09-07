@@ -13,6 +13,7 @@ const {
     validateLocalFile
 }                             = require('helios-core/common')
 const {
+    FullRepair,
     DistributionIndexProcessor,
     MojangIndexProcessor,
     downloadFile
@@ -29,7 +30,6 @@ const {
 // Internal Requirements
 const DiscordWrapper          = require('./assets/js/discordwrapper')
 const ProcessBuilder          = require('./assets/js/processbuilder')
-const { FullRepairWrapper }   = require('./assets/js/fullrepairwrapper')
 
 // Launch Elements
 const launch_content          = document.getElementById('launch_content')
@@ -520,7 +520,7 @@ async function dlAsync(login = true) {
     toggleLaunchArea(true)
     setLaunchPercentage(0, 100)
 
-    const fullRepairModule = new FullRepairWrapper(
+    const fullRepairModule = new FullRepair(
         ConfigManager.getCommonDirectory(),
         ConfigManager.getInstanceDirectory(),
         ConfigManager.getLauncherDirectory(),
